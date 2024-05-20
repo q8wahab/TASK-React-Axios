@@ -1,7 +1,13 @@
 import React from "react";
 import petsData from "../petsData";
+import { useParams } from "react-router-dom";
 const PetDetail = () => {
-  const pet = petsData[0];
+  // const pet = petsData[0];
+
+  const { petId } = useParams();
+
+  const pet = petsData.find((pet) => pet.id == petId);
+
   return (
     <div className="bg-[#F9E3BE] w-screen h-[100vh] flex justify-center items-center">
       <div className="border border-black rounded-md w-[70%] h-[70%] overflow-hidden flex flex-col md:flex-row p-5">
@@ -17,7 +23,10 @@ const PetDetail = () => {
           <h1>Type: {pet.type}</h1>
           <h1>adopted: {pet.adopted}</h1>
 
-          <button className="w-[70px] border border-black rounded-md  hover:bg-green-400 mb-5">
+          <button
+            link
+            className="w-[70px] border border-black rounded-md  hover:bg-green-400 mb-5"
+          >
             Adobt
           </button>
 

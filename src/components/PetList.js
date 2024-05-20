@@ -1,15 +1,24 @@
 import React, { useState, useSyncExternalStore } from "react";
-import petsData from "../petsData";
+
 import PetItem from "./PetItem";
 import Modal from "./Modal";
+import axios from "axios";
+import { getAllpets } from "../api/pets";
 
 const PetList = () => {
   const [query, setQuery] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const [pets, setPets] = useState([]);
 
-  const petList = petsData
+  const petList = pets
     .filter((pet) => pet.name.toLowerCase().includes(query.toLowerCase()))
     .map((pet) => <PetItem pet={pet} key={pet.id} />);
+
+  const fetchPets = async () => {
+    const response = await getAllpets();
+    setPets(response);
+  };
+
   return (
     <>
       <div className="bg-[#F9E3BE] flex flex-col justify-center items-center ">
@@ -21,6 +30,7 @@ const PetList = () => {
             placeholder="Search"
             className="w-[70%] flex justify-start items-center border border-black rounded-md"
           />
+          <button onClick={fetchPets}>Fetch pets</button>
           <button
             className="ml-auto w-[25%] px-3 py-2 rounded-md text-sm md:text-xl border border-black  flex justify-center items-center bg-green-400 hover:bg-green-600"
             onClick={() => {
