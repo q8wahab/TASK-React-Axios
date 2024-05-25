@@ -4,20 +4,21 @@ import PetItem from "./PetItem";
 import Modal from "./Modal";
 import axios from "axios";
 import { getAllpets } from "../api/pets";
+import { useQuery } from "@tanstack/react-query";
+import data from "../petsData";
 
 const PetList = () => {
   const [query, setQuery] = useState("");
   const [showModal, setShowModal] = useState(false);
-  const [pets, setPets] = useState([]);
 
-  const petList = pets
-    .filter((pet) => pet.name.toLowerCase().includes(query.toLowerCase()))
+  const { data, isLoding } = useQuery({
+    queryKey: ["pets"],
+    queryFn: getAllpets,
+  });
+
+  const petList = data
+    ?.filter((pet) => pet.name.toLowerCase().includes(query.toLowerCase()))
     .map((pet) => <PetItem pet={pet} key={pet.id} />);
-
-  const fetchPets = async () => {
-    const response = await getAllpets();
-    setPets(response);
-  };
 
   return (
     <>
@@ -30,7 +31,7 @@ const PetList = () => {
             placeholder="Search"
             className="w-[70%] flex justify-start items-center border border-black rounded-md"
           />
-          <button onClick={fetchPets}>Fetch pets</button>
+
           <button
             className="ml-auto w-[25%] px-3 py-2 rounded-md text-sm md:text-xl border border-black  flex justify-center items-center bg-green-400 hover:bg-green-600"
             onClick={() => {
